@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'data/models/Song.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   var repo = DefaultRepository();
   List<Song>? songs = await repo.loadData();
   if(songs != null){

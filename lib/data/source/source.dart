@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 import '../models/Song.dart';
 import 'package:http/http.dart' as http;
@@ -35,9 +36,17 @@ class RemoteDataSource implements DataSource {
 
 class LocalDataSource implements DataSource {
   @override
-  Future<List<Song>?> loadData() {
-    // TODO: implement loadData
-    throw UnimplementedError();
+  Future<List<Song>?> loadData() async {
+    try {
+      final String response = await rootBundle.loadString('assets/songs.json');
+      final jsonBody = jsonDecode(response) as Map;
+      final listSongJson = jsonBody['songs'] as List;
+      List<Song> listSong = listSongJson.map((song) => Song.fromJson(song)).toList();
+      return listSong;
+    } catch (err) {
+      debugPrint(err.toString());
+    }
+    return null;
   }
 
 }
